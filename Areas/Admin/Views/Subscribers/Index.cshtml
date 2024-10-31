@@ -1,0 +1,45 @@
+﻿@model List<project2BurgerMenu.entityes.subscribers>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Aboneler</h4>
+            <p class="card-description">
+
+            </p>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Abone Email</th>
+                            <th>Abone olma tarihi</th>
+
+                            <th>Sil</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.subscribersid</td>
+                                <td>@item.email</td>
+                                <td>@item.Date</td>
+                                <td><a href="/admin/subscribers/delate/@item.subscribersid" class="btn btn-danger">Sil</a></td>
+
+                            </tr>
+
+                        }
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+

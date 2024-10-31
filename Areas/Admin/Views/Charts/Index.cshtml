@@ -1,0 +1,283 @@
+﻿@{
+    ViewBag.Title = "Charts";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Charts</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <style>
+        .card {
+            height: 400px; /* Set a fixed height for the card */
+        }
+
+        #reservationPeopleChart,
+        #reservationStatusChart,
+        #reservationTimeChart,
+        #categoryProductChart {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="col-lg-6 grid-margin grid-margin-lg-0 stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Rezervasyon Saatine Göre Gelecek İnsan Sayısı</h4>
+                <canvas id="reservationPeopleChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 grid-margin grid-margin-lg-0 stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Rezervasyon Durumları</h4>
+                <canvas id="reservationStatusChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 grid-margin grid-margin-lg-0 stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Rezervasyon Saati Grafiği</h4>
+                <canvas id="reservationTimeChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 grid-margin grid-margin-lg-0 stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Kategori Ürün Sayısı</h4>
+                <canvas id="categoryProductChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Rezervasyon Saatine Göre Gelecek İnsan Sayısı Grafiği
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                url: '@Url.Action("ReservationPeopleChart", "Charts", new { area = "Admin" })',
+                success: function (result) {
+                    drawReservationPeopleChart(result);
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Hatası:", status, error);
+                }
+            });
+        });
+
+        function drawReservationPeopleChart(result) {
+            var labels = [];
+            var dataValues = [];
+
+            $.each(result, function (i, obj) {
+                labels.push(obj.ReservationTime);
+                dataValues.push(obj.TotalPeople);
+            });
+
+            var ctx = document.getElementById('reservationPeopleChart').getContext('2d');
+            var myBarChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Gelecek İnsan Sayısı',
+                        data: dataValues,
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: 'Rezervasyon Saatine Göre Gelecek İnsan Sayısı'
+                    },
+                }
+            });
+        }
+
+        // Rezervasyon Durumları Grafiği
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                url: '@Url.Action("ReservationStatusChart", "Charts", new { area = "Admin" })',
+                success: function (result) {
+                    drawReservationStatusChart(result);
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Hatası:", status, error);
+                }
+            });
+        });
+
+        function drawReservationStatusChart(result) {
+            var labels = [];
+            var dataValues = [];
+
+            $.each(result, function (i, obj) {
+                labels.push(obj.ReservationStatus);
+                dataValues.push(obj.ReservationCount);
+            });
+
+            var ctx = document.getElementById('reservationStatusChart').getContext('2d');
+            var myPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Rezervasyon Durumları',
+                        data: dataValues,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                        ],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: 'Rezervasyon Durumlarına Göre Dağılım'
+                    },
+                }
+            });
+        }
+
+       // Rezervasyon Saati Grafiği
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            url: '@Url.Action("ReservationTimeChart", "Charts", new { area = "Admin" })',
+            success: function (result) {
+                drawReservationTimeChart(result);
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX Hatası:", status, error);
+            }
+        });
+    });
+
+    function drawReservationTimeChart(result) {
+        var labels = [];
+        var dataValues = [];
+
+        $.each(result, function (i, obj) {
+            labels.push(obj.ReservationTime);
+            dataValues.push(obj.ReservationCount);
+        });
+
+        var ctx = document.getElementById('reservationTimeChart').getContext('2d');
+        var myCombinedChart = new Chart(ctx, {
+            type: 'scatter', // Dağınık grafik
+            data: {
+                datasets: [{
+                    label: 'Rezervasyon Sayısı',
+                    data: dataValues.map((value, index) => ({ x: index + 1, y: value })), // X ekseni için basit bir indeks kullanıyoruz
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    showLine: true, // Çizgi göster
+                    borderColor: 'rgba(75, 192, 192, 1)', // Çizgi rengi
+                    borderWidth: 2,
+                    fill: false, // Altını doldurma
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        type: 'linear',
+                        position: 'bottom',
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Rezervasyon Sırası'
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Rezervasyon Sayısı'
+                        }
+                    }]
+                },
+                title: {
+                    display: true,
+                    text: 'Rezervasyon Saatine Göre Dağılım'
+                },
+            }
+        });
+    }
+
+        // Kategori Ürün Sayısı Grafiği
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                url: '@Url.Action("CategoryProductChart", "Charts", new { area = "Admin" })',
+                success: function (result) {
+                    drawCategoryProductChart(result);
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX Hatası:", status, error);
+                }
+            });
+        });
+
+        function drawCategoryProductChart(result) {
+            var labels = [];
+            var dataValues = [];
+
+            $.each(result, function (i, obj) {
+                labels.push(obj.CategoryName);
+                dataValues.push(obj.ProductCount);
+            });
+
+            var ctx = document.getElementById('categoryProductChart').getContext('2d');
+            var myDoughnutChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Ürün Sayısı',
+                        data: dataValues,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255, 206, 86, 0.6)',
+                            'rgba(75, 192, 192, 0.6)',
+                            'rgba(153, 102, 255, 0.6)',
+                            'rgba(255, 159, 64, 0.6)'
+                        ],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: 'Kategori Ürün Sayısı'
+                    },
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+﻿@model List<project2BurgerMenu.entityes.About>
+<section class="site-section" id="section-about">
+    <div class="container">
+        <div class="row">
+           
+
+                @foreach (var item in Model)
+                {<div class="col-md-5 site-animate mb-5">
+                        <h4 class="site-sub-title">Hikayemiz</h4>
+                        <h2 class="site-primary-title display-4">@item.Title</h2>
+
+                        <p class="mb-4">@item.Description</p>
+                        <p><a href="#section-menu" class="btn btn-secondary btn-lg">Lezzetlerimizi Yakından Tanıyın</a></p>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-6 site-animate img" data-animate-effect="fadeInRight">
+                        <img src="@item.Img" alt="Free Template by colorlib.com" class="img-fluid">
+                    </div>
+                }
+             
+        </div>
+    </div>
+</section>

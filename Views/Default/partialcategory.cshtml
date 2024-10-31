@@ -1,0 +1,38 @@
+﻿@model List<project2BurgerMenu.entites.category>
+<ul class="nav site-tab-nav nav-pills mb-5" id="pills-tab" role="tablist">
+    @foreach (var item in Model)
+    {
+        <li class="nav-item site-animate">
+            <a class="nav-link" data-toggle="pill" href="#" role="tab" aria-controls="pills-breakfast" aria-selected="true" onclick="showCategory(@item.categoryId, this)">
+                @item.categoryName
+            </a>
+        </li>
+    }
+</ul>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function showCategory(categoryId, element) {
+        // Tüm kategori ürünlerini gizle
+        $('.category-products').hide();
+
+        // Sadece seçilen kategori ürünlerini göster
+        $('.category-products[data-category-id="' + categoryId + '"]').show();
+
+        // Tüm tabların aktif sınıfını kaldır
+        $('.nav-link').removeClass('active');
+
+        // Tıklanan tabı aktif yap
+        $(element).addClass('active');
+    }
+
+    // Başlangıçta ilk kategoriyi göster
+    $(document).ready(function () {
+        $('.category-products').hide();
+        $('.category-products[data-category-id="1"]').show(); // İlgili kategori ID'yi 1 olarak varsayalım
+    });
+</script>
+
+
+
+

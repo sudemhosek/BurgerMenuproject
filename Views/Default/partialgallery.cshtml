@@ -1,0 +1,28 @@
+﻿@model List< project2BurgerMenu.entityes.Gallery>
+<section class="site-section" id="section-gallery">
+    <div class="container">
+        <div class="row site-custom-gutters">
+
+            <div class="col-md-12 text-center mb-5 site-animate">
+                <h2 class="display-4">Gallery</h2>
+                <div class="row justify-content-center">
+                    <div class="col-md-7">
+                        <p class="lead">Mekanımızdan ve Lezzetli Yemeklerimizden Görseller</p>
+                    </div>
+                </div>
+            </div>
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 site-animate">
+                    <a href="@item.Imgurl" class="site-thumbnail image-popup"> 
+                        <img src="@item.Imgurl" alt="Free Template by colorlib.com" class="img-fluid" style="height:300px" width="350px">
+                    </a>
+                </div>
+            }
+
+
+
+
+        </div>
+    </div>
+</section>

@@ -1,0 +1,47 @@
+﻿@model List<project2BurgerMenu.entites.category>
+@{
+    ViewBag.Title = "CategoryList";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Kategori listesi</h4>
+            <p class="card-description">
+               
+            </p>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Kategori Id</th>
+                            <th>Kategori Ad</th>
+                            <th>Kategori Ürünleri</th>
+                            <th>Sil</th>
+                            <th>Güncelle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.categoryId</td>
+                                <td>@item.categoryName</td>
+                                <td><a href="/admin/product/category/@item.categoryId" class="btn btn-warning">Ürünleri Listele</a></td>
+                                <td><a href="/admin/category/delate/@item.categoryId" class="btn btn-danger">Sil</a></td>
+                                <td><a href="/admin/category/update/@item.categoryId" class="btn btn-success">Güncelle</a></td>
+
+                            </tr>
+
+                        }
+
+
+                    </tbody>
+                </table>
+                <a href="@Url.Action("Create", "Category", new { area = "Admin" })" class="btn btn-primary" class="btn btn-primary">Ekle</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

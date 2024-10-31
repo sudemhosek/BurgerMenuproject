@@ -1,0 +1,59 @@
+﻿@model project2BurgerMenu.entites.Product
+
+
+<form id="productForm">
+    <div class="form-group">
+        <label for="ProductName">Ürün Adı</label>
+        <input type="text" class="form-control" id="ProductName" name="Productname" required>
+    </div>
+    <div class="form-group">
+        <label for="CategoryId">Kategori</label>
+        <select class="form-control" id="CategoryId" name="CategoryId">
+            @if (ViewBag.Categories != null)
+            {
+                foreach (var category in (List<SelectListItem>)ViewBag.Categories)
+                {
+                    <option value="@category.Value">@category.Text</option>
+                }
+            }
+            else
+            {
+                <option value="">Kategori bulunamadı</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="Price">Fiyat</label>
+        <input type="number" class="form-control" id="Price" name="Productprice" step="0.01" required>
+    </div>
+    <div class="form-group">
+        <label for="Description">Açıklama</label>
+        <textarea class="form-control" id="Description" name="Productdescription"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="ImageUrl">Görsel URL</label>
+        <input type="text" class="form-control" id="ImageUrl" name="ımageUrl">
+    </div>
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#productForm').on('submit', function (event) {
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("PartialAdd", "adminlayout")',
+                data: $(this).serialize(),
+                success: function (result) {
+                    alert('Ürün başarıyla eklendi!');
+                    $('#addProductModal').modal('hide');
+                    location.reload(); // Sayfayı yeniler
+                },
+                error: function (xhr, status, error) {
+                    alert('Bir hata oluştu: ' + error);
+                }
+            });
+        });
+    });
+</script>

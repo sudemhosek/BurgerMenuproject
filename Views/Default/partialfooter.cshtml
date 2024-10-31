@@ -1,0 +1,79 @@
+﻿@model project2BurgerMenu.entityes.subscribers
+<footer class="site-footer site-bg-dark site-section">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-4 site-animate">
+                        <h2 class="site-heading-2">Hakkımızda</h2>
+                        <p>
+                            @ViewBag.Description
+                    </p>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-3 site-animate">
+                    <div class="site-footer-widget mb-4">
+                        <h2 class="site-heading-2">Eatwell</h2>
+                        <ul class="list-unstyled">
+                            <li><a href="/default/partialabout/" class="py-2 d-block">Hakkımızda</a></li>
+                            <li><a href="/default/partialabout/" class="py-2 d-block">Menü</a></li>
+                            <li><a href="/default/partialabout/" class="py-2 d-block">iletişim</a></li>
+                            <li><a href="/default/partialabout/" class="py-2 d-block">rezervasyon</a></li>
+                        </ul>
+
+                    </div>
+                    @using (Html.BeginForm("PartialSubscribe", "Default", FormMethod.Post))
+                    {
+                        <div class="form-group">
+                            <h2 class="site-heading-2">Bültenİmİze Abone Olun</h2>
+
+                            @Html.TextBoxFor(x => x.email, new { @class = "form-control rounded-input", placeholder = "Email Adresiniz" })
+                            @Html.ValidationMessageFor(x => x.email, "", new { @class = "text-danger" })
+                        </div>
+
+                        <button type="submit" class="rounded-button" style="rounded-input;">Abone Ol</button>
+                    }
+                </div>
+        <div class="row site-animate">
+            <div class="col-md-12 text-center">
+                <div class="site-footer-widget mb-4">
+                    <ul class="site-footer-social list-unstyled ">
+                        <li class="site-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                        <li class="site-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                        <li class="site-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-12 text-center">
+                <p>
+                    &copy; <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    Copyright &copy;
+                    <script>document.write(new Date().getFullYear());</script> All rights reserved | Made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a> &amp; distributed by <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+<style>
+    /* Yuvarlak kenarlı input */
+    .rounded-input {
+        border-radius: 15px; /* Kenarların yuvarlanma derecesi */
+        border: 1px solid #ccc; /* Kenar çizgisi */
+        padding: 10px; /* İç boşluk */
+        width: 100%; /* Genişliği ayarlar */
+    }
+
+    .rounded-button {
+        border-radius: 15px; /* Kenarların yuvarlanma derecesi */
+        padding: 10px 20px; /* İç boşluk (yatay ve dikey) */
+        background-color: orange; /* Butonun arka plan rengi */
+        border: none; /* Kenarlık kaldırılır */
+        color: white; /* Yazı rengi */
+        cursor: pointer; /* Buton üzerine gelindiğinde imleç değişimi */
+    }
+
+        .rounded-button:hover {
+            background-color: darkorange; /* Hover durumunda arka plan rengini değiştir */
+        }
+</style>

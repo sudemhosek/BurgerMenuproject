@@ -1,0 +1,370 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+<script src="~/regal/js/off-canvas.js"></script>
+<script src="~/regal/js/hoverable-collapse.js"></script>
+<script src="~/regal/js/template.js"></script>
+<script src="~/regal/vendors/chart.js/Chart.min.js"></script>
+<script src="~/regal/vendors/jquery-bar-rating/jquery.barrating.min.js"></script>
+<script src="~/regal/js/dashboard.js"></script>
+
+<style>
+    .legend-box {
+        width: 15px;
+        height: 15px;
+        border-radius: 3px;
+        margin-right: 3px;
+    }
+
+    .admin-box {
+        background-color: #007bff;
+    }
+
+    .referanslar-box {
+        background-color: #b200ff;
+    }
+
+    .legend-label {
+        margin-left: 5px;
+    }
+
+    .fw-bold {
+        font-weight: bold;
+    }
+
+    /* Kutucuklar ve metinleri arasında boşluklar ayarlandı */
+    .mb-1 {
+        margin-bottom: 0.25rem;
+    }
+
+    /* Sayıların altında küçük bir boşluk */
+    h5 {
+        margin-bottom: 0.5rem;
+    }
+
+    .col-xl-3 {
+        width: 500px; /* İstediğiniz genişliği ayarlayabilirsiniz */
+    }
+</style>
+
+
+<div class="row">
+    <div class="col-sm-12 mb-4 mb-xl-0">
+        <h4 class="font-weight-bold text-dark">Hoşgeldin!</h4>
+        <p class="font-weight-normal mb-2 text-muted">@ViewBag.datetime</p>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-xl-3 flex-column d-flex grid-margin stretch-card">
+        <div class="row flex-grow">
+            <div class="col-sm-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Ürün Sayısı</h4>
+                        <p></p>
+                        <h4 class="text-dark font-weight-bold mb-2">@ViewBag.products</h4>
+                        <canvas id="customers"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Rezervasyon Sayısı</h4>
+                        <p></p>
+                        <h4 class="text-dark font-weight-bold mb-2">@ViewBag.reservations</h4>
+                        <canvas id="orders"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-9 d-flex grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Website Metrikleri</h4>
+
+                <div class="row mb-3 justify-content-end">
+                    <!-- Admin ve Referansların sütun içinde hizalanması -->
+                    <div class="col-lg-5 text-end">
+                        <div class="d-flex flex-column align-items-center">
+                            <!-- Admin sayısı ve kutucuk-yazı aynı sütunda hizalandı -->
+                            <h5 class="fw-bold mb-0">@ViewBag.admins</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="legend-box admin-box"></div>
+                                <div class="legend-label">Admin</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5 text-end">
+                        <div class="d-flex flex-column align-items-center">
+                            <!-- Referanslar sayısı ve kutucuk-yazı aynı sütunda hizalandı -->
+                            <h5 class="fw-bold mb-0">@ViewBag.testimonials</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="legend-box referanslar-box"></div>
+                                <div class="legend-label">İletişime geçen sayısı</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <canvas id="web-audience-metrics-satacked" class="mt-3"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="row">
+    <div class="col-xl-9 grid-margin-lg-0 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">En Çok Sipariş Edilen Ürünler</h4>
+                <div class="table-responsive mt-5">
+                    <table class="table table-header-bg">
+                        <thead>
+                            <tr>
+                                <th>Ürün</th>
+                                <th>Ücret</th>
+                                <th>Kategori</th>
+                                <th>Hedefimiz</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < ViewBag.productNames.Count; i++)
+                            {
+                                var progress = ViewBag.productProgress[i];
+                                var progressColor = "bg-info"; // Default renk
+
+                                // Renk değiştirme
+                                if (progress >= 75)
+                                {
+                                    progressColor = "bg-success";  // Yeşil renk
+                                }
+                                else if (progress >= 50)
+                                {
+                                    progressColor = "bg-warning";  // Sarı renk
+                                }
+                                else if (progress >= 25)
+                                {
+                                    progressColor = "bg-danger";   // Kırmızı renk
+                                }
+
+                                <tr>
+                                    <td>@ViewBag.productNames[i]</td>
+                                    <td>@ViewBag.productPrices[i]</td>
+                                    <td>@ViewBag.productCategory[i]</td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-sm-10">
+                                                <div class="progress">
+                                                    <div class="progress-bar @progressColor" role="progressbar" style="width: @progress%" aria-valuenow="@progress" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                @progress%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 grid-margin-lg-0 grid-margin stretch-card">
+        <div class="card" style="width:100%">
+            <div class="card-body">
+                <h4 class="card-title mb-3">Restaurant Puanı</h4>
+                <div class="d-flex">
+                    <div>
+                        <h4 class="text-dark font-weight-bold mb-2 mr-2">4.3</h4>
+                    </div>
+                    <div>
+                        <select id="over-all-rating" name="rating" autocomplete="off">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+                <p class="mb-4">2150 Kişi Puanladı</p>
+                <div class="row">
+                    <div class="col-sm-2 pr-0">
+                        <div class="d-flex">
+                            <div>
+                                <div class="text-dark font-weight-bold mb-2 mr-2">5</div>
+                            </div>
+                            <div>
+                                <i class="fa fa-star text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 pl-2">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <div class="progress progress-lg mt-1">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 80%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 p-lg-0">
+                                80%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-sm-2 pr-0">
+                        <div class="d-flex">
+                            <div>
+                                <div class="text-dark font-weight-bold mb-2 mr-2">4</div>
+                            </div>
+                            <div>
+                                <i class="fa fa-star text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 pl-2">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <div class="progress progress-lg mt-1">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 45%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 p-lg-0">
+                                45%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-sm-2 pr-0">
+                        <div class="d-flex">
+                            <div>
+                                <div class="text-dark font-weight-bold mb-2 mr-2">3</div>
+                            </div>
+                            <div>
+                                <i class="fa fa-star text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 pl-2">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <div class="progress progress-lg mt-1">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 30%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 p-lg-0">
+                                30%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-sm-2 pr-0">
+                        <div class="d-flex">
+                            <div>
+                                <div class="text-dark font-weight-bold mb-2 mr-2">2</div>
+                            </div>
+                            <div>
+                                <i class="fa fa-star text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 pl-2">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <div class="progress progress-lg mt-1">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 8%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 p-lg-0">
+                                8%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-sm-2 pr-0">
+                        <div class="d-flex">
+                            <div>
+                                <div class="text-dark font-weight-bold mb-2 mr-2">5</div>
+                            </div>
+                            <div>
+                                <i class="fa fa-star text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-9 pl-2">
+                        <div class="row">
+                            <div class="col-sm-10">
+                                <div class="progress progress-lg mt-1">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 1%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 p-lg-0">
+                                1%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p class="mb-2 mt-3 mb-3 text-dark font-weight-bold">En Beğenilen Ürünler</p>
+                        <div class="d-flex">
+                            <div>
+                                <div class="text-dark font-weight-bold mb-2 mr-2">4.5</div>
+                            </div>
+                            <div class="mr-2">
+                                <i class="fa fa-star text-warning"></i>
+                            </div>
+                            <div><p>Havuç tarator</p></div>
+                        </div>
+                        <div class="d-flex">
+                            <div>
+                                <div class="text-dark font-weight-bold mb-2 mr-2">4.1</div>
+                            </div>
+                            <div class="mr-2">
+                                <i class="fa fa-star text-warning"></i>
+                            </div>
+                            <div><p>mercimek Çorbası</p></div>
+                        </div>
+                        <div class="d-flex">
+                            <div>
+                                <div class="text-dark font-weight-bold mb-2 mr-2">3.8</div>
+                            </div>
+                            <div class="mr-2">
+                                <i class="fa fa-star text-warning"></i>
+                            </div>
+                            <div><p>köfte</p></div>
+                        </div>
+                        <div class="d-flex">
+                            <div>
+                                <div class="text-dark font-weight-bold mb-2 mr-2">3.4</div>
+                            </div>
+                            <div class="mr-2">
+                                <i class="fa fa-star text-warning"></i>
+                            </div>
+                            <div><p>kazandibi</p></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

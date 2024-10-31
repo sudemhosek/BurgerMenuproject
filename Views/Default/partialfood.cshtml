@@ -1,0 +1,37 @@
+﻿<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Sayfa yüklendiğinde ilk başta tüm ürünleri çek
+        $.ajax({
+            url: '/default/partialMenu',
+            type: 'GET',
+            success: function (result) {
+                $('#menu-items').html(result); // Tüm menü öğelerini yerleştir
+            },
+            error: function (xhr, status, error) {
+                console.log("AJAX Error: " + error);
+            }
+        });
+
+        // Kategori butonlarına tıklandığında çalışacak kısım
+        $('.nav-link').on('click', function (e) {
+            e.preventDefault();
+
+            var categoryId = $(this).data('id'); // data-id'den kategori ID'sini al
+            console.log("Selected Category ID: " + categoryId); // Konsolda Category ID'yi kontrol et
+
+            $.ajax({
+                url: '/default/partialMenu',
+                type: 'GET',
+                data: { categoryId: categoryId }, // Ajax ile kategori ID'sini gönder
+                success: function (result) {
+                    console.log(result); // Geri dönen sonucu kontrol et
+                    $('#menu-items').html(result); // Sonucu menü alanına yerleştir
+                },
+                error: function (xhr, status, error) {
+                    console.log("AJAX Error: " + error);
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,35 @@
+﻿@model project2BurgerMenu.entityes.About
+@{
+    ViewBag.Title = "update";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+<h2>Hakkımda Bilgilerini Düzenle</h2>
+<div class="col-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+
+                @Html.HiddenFor(x => x.AboutId, new { @class = "form-control" })
+                <br />
+
+                <label>Başlık</label>
+                @Html.TextBoxFor(x => x.Title, new { @class = "form-control" })
+                <br />
+
+                <label>Resim URL</label>
+                @Html.TextBoxFor(x => x.Img, new { @class = "form-control" })
+                <br />
+
+                <label>Hakkımda</label>
+                @Html.TextAreaFor(x => x.Description, 6, 0, new { @class = "form-control" })
+                <br />
+
+                <button class="btn btn-info">Güncelle</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+

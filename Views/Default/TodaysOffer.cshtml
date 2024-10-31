@@ -1,0 +1,40 @@
+﻿@model List<project2BurgerMenu.entites.Product>
+
+<section class="site-section bg-light" id="section-offer">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-12 text-center mb-5 site-animate">
+                <h4 class="site-sub-title">Bugünün Teklifleri</h4>
+                <h2 class="display-4">Sizler İçin Eşsiz Lezzetler </h2>
+                <div class="row justify-content-center">
+                    <div class="col-md-7">
+                        <p class="lead">Hftanın her günü belli ürünlerde %20 indirim, günün her saatinde içeceklerede %15
+                        indirim ile sizleri restoranlarımıza bekliyoruz</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="owl-carousel site-owl">
+                    @foreach (var item in Model)
+                    {
+                        <div class="item">
+                            <div class="media d-block mb-4 text-center site-media site-animate border-0">
+                                <img src="@item.ımageUrl" style="height:240px" alt="Free Template by colorlib.com" class="img-fluid">
+                                <div class="media-body p-md-5 p-4">
+                                    <h5 class="text-primary">@item.Productprice </h5>
+                                    <h5 class="mt-0 h4">@item.Productname</h5>
+                                    <p class="mb-4">@item.Productdescription</p>
+
+                                    <p class="mb-0"><a href="#" class="btn btn-primary btn-sm">HEMEN SİPARİŞ VER!</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

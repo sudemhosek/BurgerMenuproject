@@ -1,0 +1,69 @@
+﻿@model List<project2BurgerMenu.entites.Product>
+@{
+    int count = 0;
+}
+<section class="site-section" id="section-menu">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center mb-5 site-animate">
+                <h2 class="display-4">Lezzetli Menü</h2>
+                <div class="row justify-content-center">
+                    <div class="col-md-7">
+                        <p class="lead">Menümüzde, sadece bir yemek değil, aynı zamanda bir deneyim sunuyoruz. Gözlerinizi kapatın ve her lokmada yeni bir hikaye keşfedin. Sofralarınızı şenlendirecek, kalplerinizi ısıtacak lezzetler için hazır olun!</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-12 text-center">
+                <div class="col-md-12 text-center">
+                    @Html.Action("Partialcategory", "Default")
+                    <div class="tab-content text-left">
+                        <div class="tab-pane fade show active" id="pills-tab" role="tabpanel" aria-labelledby="pills-tab">
+                            <div class="container">
+                                <div class="row justify-content-center" id="menu-container">
+
+                                    @foreach (var item in Model)
+                                    {
+                                        count++;
+                                        if (count % 2 == 1)
+                                        {
+                                            <div class="category-products col-md-5 site-animate mb-4" data-category-id="@item.CategoryId">
+                                                <div class="media menu-item">
+                                                    <img class="mr-3 img-fluid" src="@item.ımageUrl" alt="Ürün resmi">
+                                                    <div class="media-body">
+                                                        <h5 class="mt-0">@item.Productname</h5>
+                                                        <p>@item.Productdescription</p>
+                                                        <h6 class="text-primary menu-price">@item.Productprice₺</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        else
+                                        {
+                                            <div class="category-products col-md-5 site-animate mb-4" data-category-id="@item.CategoryId">
+                                                <div class="media menu-item">
+                                                    <img class="mr-3 img-fluid" src="@item.ımageUrl" alt="Ürün resmi">
+                                                    <div class="media-body">
+                                                        <h5 class="mt-0">@item.Productname</h5>
+                                                        <p>@item.Productdescription</p>
+                                                        <h6 class="text-primary menu-price">@item.Productprice₺</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+
+                                    }
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+    </div>
+   
+
+</section>

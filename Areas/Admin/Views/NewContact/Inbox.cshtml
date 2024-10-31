@@ -1,0 +1,85 @@
+﻿@model List<project2BurgerMenu.entityes.contact>
+@{
+    ViewBag.Title = "Inbox";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Gelen İletişimler</h4>
+            <p class="card-description"></p>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Gönderen Ad</th>
+                            <th>Gönderen Email</th>
+                            <th>Durum</th>
+                            <th>Sil</th>
+                            <th>Güncelle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.contactid</td>
+                                <td>@item.name</td>
+                                <td>@item.email</td>
+                                @if (item.isread == false)
+                                {
+                                    <td><a href="/Admin/newContact/MessageStatusChangeToTrue/@item.contactid" class="btn btn-inverse-success btn-fw">Okundu Olarak İşaretle</a></td>
+                                }
+                                else
+                                {
+                                    <td><a href="/Admin/newContact/MessageStatusChangeToFalse/@item.contactid" class="btn btn-inverse-warning btn-fw">Okunmadı Olarak İşaretle</a></td>
+                                }
+                                <td><a href="/Admin/newContact/DeleteMessage/@item.contactid" class="btn btn-danger">Sil</a></td>
+                                <td><a href="#" class="btn btn-success open-modal" data-id="@item.contactid" data-toggle="modal" data-target="#detailModal">Görüntüle</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailModalLabel">Mesaj Detayları</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="modalContent"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.open-modal').on('click', function () {
+            var messageId = $(this).data('id');
+            $.ajax({
+                type: 'GET',
+                url: '/Admin/newContact/DetailMessage/' + messageId,
+                success: function (result) {
+                    $('#modalContent').html(result);
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX hatası:", error);
+                }
+            });
+        });
+    });
+</script>
